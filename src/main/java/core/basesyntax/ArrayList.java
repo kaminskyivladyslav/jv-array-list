@@ -14,23 +14,15 @@ public class ArrayList<T> implements List<T> {
 
     @Override
     public void add(T value) {
-        if (size == array.length) {
-            Object[] newArray = new Object[array.length + array.length / 2];
-            System.arraycopy(array, 0, newArray, 0, array.length);
-            array = newArray;
-        }
+        ensureCapacity();
         array[size] = value;
         size++;
     }
 
     @Override
     public void add(T value, int index) {
-        if (size == array.length) {
-            Object[] newArray = new Object[array.length + array.length / 2];
-            System.arraycopy(array, 0, newArray, 0, array.length);
-            array = newArray;
-        }
-        if (index > size || index < 0) {
+        ensureCapacity();
+        if (index < 0 || index > size) {
             throw new ArrayListIndexOutOfBoundsException("Index out of bounds");
         }
         System.arraycopy(array, index, array, index + 1, size - index);
@@ -47,25 +39,19 @@ public class ArrayList<T> implements List<T> {
 
     @Override
     public T get(int index) {
-        if (index >= size || index < 0) {
-            throw new ArrayListIndexOutOfBoundsException("Index out of bounds");
-        }
+        indexOutBounds(index);
         return (T) array[index];
     }
 
     @Override
     public void set(T value, int index) {
-        if (index >= size || index < 0) {
-            throw new ArrayListIndexOutOfBoundsException("Index out of bounds");
-        }
+        indexOutBounds(index);
         array[index] = value;
     }
 
     @Override
     public T remove(int index) {
-        if (index >= size || index < 0) {
-            throw new ArrayListIndexOutOfBoundsException("Index out of bounds");
-        }
+        indexOutBounds(index);
         T value = (T) array[index];
         System.arraycopy(array, index + 1, array, index, size - index - 1);
         size--;
@@ -92,10 +78,20 @@ public class ArrayList<T> implements List<T> {
 
     @Override
     public boolean isEmpty() {
-        if (size == 0) {
-            return true;
-        }
-        return false;
+        return size == 0;
     }
 
+    private void ensureCapacity() {
+        if (size == array.length) {
+            Object[] newArray = new Object[array.length + array.length / 2];
+            System.arraycopy(array, 0, newArray, 0, size);
+            array = newArray;
+        }
+    }
+
+    private void indexOutBounds(int index) {
+        if (index >= size || index < 0) {
+            throw new ArrayListIndexOutOfBoundsException("Index out of bounds");
+        }
+    }
 }
