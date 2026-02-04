@@ -62,8 +62,8 @@ public class ArrayList<T> implements List<T> {
     @Override
     public T remove(T element) {
         for (int i = 0; i < size; i++) {
-            if (array[i] != null && array[i].equals(element) ||
-                    array[i] == null && element == null) {
+            if (array[i] != null && array[i].equals(element)
+                    || array[i] == null && element == null) {
                 System.arraycopy(array, i + 1, array, i, size - i - 1);
                 size--;
                 return element;
